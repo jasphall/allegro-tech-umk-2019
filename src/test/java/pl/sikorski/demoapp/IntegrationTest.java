@@ -1,5 +1,7 @@
 package pl.sikorski.demoapp;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,25 +14,23 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DemoappApplicationTests {
+public abstract class IntegrationTest {
 
 	@Autowired
-	TestRestTemplate httpClient;
+	protected TestRestTemplate httpClient;
+
+	@Autowired
+	protected ObjectMapper objectMapper;
 
 	@LocalServerPort
-	int port;
+	protected int port;
 
-	@Test
-	public void shouldReturnGreetings() {
-		// given
-		final String url = "http://localhost:" + port + "/hello";
-
-		// when
-		ResponseEntity<String> response = httpClient.getForEntity(url, String.class);
-
-		// then
-		Assertions.assertThat(response.getStatusCodeValue()).isEqualTo(200);
-		Assertions.assertThat(response.getBody()).isEqualTo("Hello World!");
+	protected String mapToJson(Object object) {
+		try {
+			return objectMapper.writeValueAsString(object);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

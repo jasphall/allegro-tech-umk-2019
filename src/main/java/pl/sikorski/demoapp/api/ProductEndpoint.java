@@ -24,11 +24,7 @@ class ProductEndpoint {
         this.productFacade = productFacade;
     }
 
-    @RequestMapping(
-            value = "/{id}",
-            method = RequestMethod.GET,
-            produces = "application/json; charset=UTF-8"
-    )
+    @GetMapping("/{id}")
     ProductResponseDto getProduct(@PathVariable String id) {
         return productFacade.get(id);
     }

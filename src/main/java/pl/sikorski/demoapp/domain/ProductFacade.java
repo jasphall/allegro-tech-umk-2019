@@ -1,7 +1,7 @@
 package pl.sikorski.demoapp.domain;
 
 public interface ProductFacade {
-    // get
+    ProductResponseDto get(String id);
 
     ProductResponseDto create(ProductRequestDto productRequest);
 

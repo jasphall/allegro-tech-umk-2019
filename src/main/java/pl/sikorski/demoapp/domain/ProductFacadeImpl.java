@@ -1,6 +1,7 @@
 package pl.sikorski.demoapp.domain;
 
 import org.springframework.stereotype.Component;
+import pl.sikorski.demoapp.api.ProductNotFoundException;
 import pl.sikorski.demoapp.infrastructure.ProductRepository;
 
 import java.time.LocalDateTime;
@@ -33,4 +34,14 @@ class ProductFacadeImpl implements ProductFacade {
         );
     }
 
+    @Override
+    public ProductResponseDto get(String id) {
+        var product = productRepository.findById(id);
+
+        if (product == null) {
+            throw new ProductNotFoundException(id);
+        }
+
+        return new ProductResponseDto(product.getId(), product.getName());
+    }
 }

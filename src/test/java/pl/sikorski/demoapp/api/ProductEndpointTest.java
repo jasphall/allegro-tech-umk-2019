@@ -11,6 +11,7 @@ import pl.sikorski.demoapp.domain.ProductRequestDto;
 import pl.sikorski.demoapp.domain.ProductResponseDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.*;
 
 public class ProductEndpointTest extends IntegrationTest {
 
@@ -29,7 +30,7 @@ public class ProductEndpointTest extends IntegrationTest {
         ResponseEntity<String> response = httpClient.postForEntity(url, httpRequest, String.class);
 
         // then
-        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+        assertThat(response.getStatusCodeValue()).isEqualTo(OK);
         assertThat(response.getBody()).contains("\"name\":\"czerwona sukienka\"");
     }
 
@@ -44,7 +45,7 @@ public class ProductEndpointTest extends IntegrationTest {
         ResponseEntity<ProductResponseDto> response = httpClient.getForEntity(url + createdProduct.getId(), ProductResponseDto.class);
 
         //then
-        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+        assertThat(response.getStatusCodeValue()).isEqualTo(OK);
         assertThat(response.getBody()).isEqualTo(createdProduct);
     }
 
@@ -57,27 +58,9 @@ public class ProductEndpointTest extends IntegrationTest {
         ResponseEntity<String> response = httpClient.getForEntity(url, String.class);
 
         //then
-        assertThat(response.getStatusCodeValue()).isEqualTo(404);
+        assertThat(response.getStatusCodeValue()).isEqualTo(NOT_FOUND);
         assertThat(response.getBody()).isEqualTo("There is no product with id: dummyProductId");
     }
-
-//    @Test
-//    public void shouldCreateProduct() {
-//        // in order to make it work you should add @JsonCreator/@JsonProperty annotations to response too
-//
-//        // given
-//        var url = "http://localhost:" + port + "/products";
-//        var productRequest = new ProductRequestDto("czerwona sukienka");
-//        var productRequestJson = mapToJson(productRequest);
-//        var httpRequest = getHttpRequest(productRequestJson);
-//
-//        // when
-//        ResponseEntity<ProductResponseDto> response = httpClient.postForEntity(url, httpRequest, ProductResponseDto.class);
-//
-//        // then
-//        assertThat(response.getStatusCodeValue()).isEqualTo(200);
-//        assertThat(response.getBody().getName()).isEqualTo("czerwona sukienka");
-//    }
 
     private HttpEntity<String> getHttpRequest(String json) {
         HttpHeaders headers = new HttpHeaders();

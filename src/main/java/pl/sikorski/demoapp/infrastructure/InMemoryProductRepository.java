@@ -16,4 +16,8 @@ class InMemoryProductRepository implements ProductRepository {
         products.put(product.getId(), product);
     }
 
+    @Override
+    public Product findById(String id) {
+        return products.get(id);
+    }
 }
